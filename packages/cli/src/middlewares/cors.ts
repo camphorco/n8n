@@ -13,8 +13,6 @@ export const corsMiddleware: RequestHandler = (req, res, next) => {
 		);
 	// }
 
-	res.header("X-Frame-Options", "DENY")
-
 	if (req.method === 'OPTIONS') {
 		res.writeHead(204).end();
 	} else {
