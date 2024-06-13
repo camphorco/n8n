@@ -14,8 +14,6 @@ import { Logger } from '@/Logger';
 import type { AuthenticatedRequest } from '@/requests';
 import { JwtService } from '@/services/jwt.service';
 import { UrlService } from '@/services/url.service';
-import { eq } from 'semver';
-import { redisStore } from '@/services/cache/redis.cache-manager';
 
 interface AuthJwtPayload {
 	/** User Id */
@@ -48,7 +46,6 @@ export class AuthService {
 
 	async authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 		const token = req.cookies[AUTH_COOKIE_NAME];
-		
 		if (token) {
 			try {
 				req.user = await this.resolveJwt(token, res);
@@ -60,17 +57,9 @@ export class AuthService {
 				}
 			}
 		}
-		
-		if (req.body) {
-			if (Object.keys(req.body).length === 0) { //oauth flow sends a lot of {} request bodies before the main request (these normally have req.user but not in our case so adding this logic) 
-				next(); 
-			} else if ("type" in req.body && (req.body.type === 'googleCalendarOAuth2Api' || req.body.type === 'microsoftOutlookOAuth2Api')) {
-				next(); 
-			} else {
-				res.status(401).json({ status: 'error', message: 'Unauthorized' });
-			}
-		}
-		
+
+		if (req.user) next();
+		else res.status(401).json({ status: 'error', message: 'Unauthorized' });
 	}
 
 	clearCookie(res: Response) {
