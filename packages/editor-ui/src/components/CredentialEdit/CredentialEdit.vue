@@ -1059,7 +1059,7 @@ export default defineComponent({
 
 			const receiveMessage = (event: MessageEvent) => {
 				// // TODO: Add check that it came from n8n
-				// if (event.origin !== 'http://localhost:5678') {
+				// if (event.origin !== 'http://example.org:8080') {
 				// 	return;
 				// }
 				if (event.data === 'success') {
