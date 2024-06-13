@@ -14,8 +14,6 @@ import { Logger } from '@/Logger';
 import type { AuthenticatedRequest } from '@/requests';
 import { JwtService } from '@/services/jwt.service';
 import { UrlService } from '@/services/url.service';
-import { eq } from 'semver';
-import { redisStore } from '@/services/cache/redis.cache-manager';
 
 interface AuthJwtPayload {
 	/** User Id */
