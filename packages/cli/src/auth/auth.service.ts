@@ -14,7 +14,6 @@ import { Logger } from '@/Logger';
 import type { AuthenticatedRequest } from '@/requests';
 import { JwtService } from '@/services/jwt.service';
 import { UrlService } from '@/services/url.service';
-import { NodeExecuteFunctions } from 'n8n-core';
 
 interface AuthJwtPayload {
 	/** User Id */

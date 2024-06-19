@@ -122,6 +122,6 @@ export class ClientOAuth2 {
 		if (response.status < 200 || response.status >= 399)
 			throw new ResponseError(response.status, response.data);
 
-		return body; // contains access_token field with scope for calendar and gmail
+		return body;
 	}
 }

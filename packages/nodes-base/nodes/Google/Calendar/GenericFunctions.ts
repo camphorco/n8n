@@ -42,7 +42,6 @@ export async function googleApiRequest(
 		}
 
 		//@ts-ignore
-
 		return await this.helpers.requestOAuth2.call(this, 'googleOAuth2Api', options);
 	} catch (error) {
 		throw new NodeApiError(this.getNode(), error as JsonObject);
