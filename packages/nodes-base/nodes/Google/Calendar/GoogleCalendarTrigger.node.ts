@@ -32,8 +32,22 @@ export class GoogleCalendarTrigger implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
+				name: 'googleOAuth2Api',
+				required: true,
+				displayOptions: {
+					show: {
+						authentication: ['oAuth2'],
+					},
+				},
+			},
+			{
 				name: 'googleCalendarOAuth2Api',
 				required: true,
+				displayOptions: {
+					show: {
+						authentication: ['oAuth2'],
+					},
+				},
 			},
 		],
 		polling: true,
@@ -189,7 +203,7 @@ export class GoogleCalendarTrigger implements INodeType {
 				orderBy: 'startTime',
 			});
 		}
-
+		console.log('inside google calendar trigger node: ');
 		if (this.getMode() === 'manual') {
 			delete qs.updatedMin;
 			delete qs.timeMin;

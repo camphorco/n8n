@@ -32,16 +32,7 @@ export class GmailTrigger implements INodeType {
 		},
 		credentials: [
 			{
-				name: 'googleApi',
-				required: true,
-				displayOptions: {
-					show: {
-						authentication: ['serviceAccount'],
-					},
-				},
-			},
-			{
-				name: 'gmailOAuth2',
+				name: 'googleOAuth2Api',
 				required: true,
 				displayOptions: {
 					show: {
@@ -63,10 +54,6 @@ export class GmailTrigger implements INodeType {
 						// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 						name: 'OAuth2 (recommended)',
 						value: 'oAuth2',
-					},
-					{
-						name: 'Service Account',
-						value: 'serviceAccount',
 					},
 				],
 				default: 'oAuth2',

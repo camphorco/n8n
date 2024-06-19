@@ -33,6 +33,7 @@ export async function createNewCredential(
 	context: IRestApiContext,
 	data: ICredentialsDecrypted,
 ): Promise<ICredentialsResponse> {
+	console.log('create new credential: ', context, data);
 	return await makeRestApiRequest(context, 'POST', '/credentials', data as unknown as IDataObject);
 }
 

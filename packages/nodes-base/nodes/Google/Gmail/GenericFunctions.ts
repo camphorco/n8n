@@ -72,7 +72,7 @@ export async function googleApiRequest(
 			delete options.body;
 		}
 
-		let credentialType = 'gmailOAuth2';
+		let credentialType = 'googleOAuth2Api';
 		const authentication = this.getNodeParameter('authentication', 0) as string;
 
 		if (authentication === 'serviceAccount') {

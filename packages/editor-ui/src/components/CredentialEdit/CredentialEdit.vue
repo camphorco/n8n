@@ -1022,7 +1022,7 @@ export default defineComponent({
 			}
 
 			const types = this.parentTypes;
-
+			
 			try {
 				const credData = { id: credential.id, ...this.credentialData };
 				if (this.credentialTypeName === 'oAuth2Api' || types.includes('oAuth2Api')) {

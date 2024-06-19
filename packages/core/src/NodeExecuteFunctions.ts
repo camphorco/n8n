@@ -1298,7 +1298,6 @@ export async function requestOAuth2(
 	isN8nRequest = false,
 ) {
 	removeEmptyBody(requestOptions);
-
 	const credentials = (await this.getCredentials(
 		credentialsType,
 	)) as unknown as OAuth2CredentialData;
@@ -1361,8 +1360,11 @@ export async function requestOAuth2(
 
 	// Signs the request by adding authorization headers or query parameters depending
 	// on the token-type used.
+
+	requestOptions.oAuth2 = true;
 	const newRequestOptions = token.sign(requestOptions as ClientOAuth2RequestObject);
 	const newRequestHeaders = (newRequestOptions.headers = newRequestOptions.headers ?? {});
+
 	// If keep bearer is false remove the it from the authorization header
 	if (oAuth2Options?.keepBearer === false && typeof newRequestHeaders.Authorization === 'string') {
 		newRequestHeaders.Authorization = newRequestHeaders.Authorization.split(' ')[1];
@@ -1372,6 +1374,7 @@ export async function requestOAuth2(
 			[oAuth2Options.keyToIncludeInAccessTokenHeader]: token.accessToken,
 		});
 	}
+
 	if (isN8nRequest) {
 		return await this.helpers.httpRequest(newRequestOptions).catch(async (error: AxiosError) => {
 			if (error.response?.status === 401) {
@@ -1430,6 +1433,7 @@ export async function requestOAuth2(
 					});
 				}
 
+				console.log('refreshed: ');
 				return await this.helpers.httpRequest(refreshedRequestOption);
 			}
 			throw error;
@@ -1441,6 +1445,7 @@ export async function requestOAuth2(
 			: oAuth2Options?.tokenExpiredStatusCode;
 
 	return await this.helpers
+
 		.request(newRequestOptions as IRequestOptions)
 		.then((response) => {
 			const requestOptions = newRequestOptions as any;
@@ -1476,6 +1481,7 @@ export async function requestOAuth2(
 
 				// if it's OAuth2 with client credentials grant type, get a new token
 				// instead of refreshing it.
+				console.log('token refresh in node execute: ', tokenRefreshOptions);
 				if (credentials.grantType === 'clientCredentials') {
 					newToken = await token.client.credentials.getToken();
 				} else {
@@ -1517,6 +1523,7 @@ export async function requestOAuth2(
 					});
 				}
 
+				console.log('final: ');
 				return await this.helpers.request(newRequestOptions as IRequestOptions);
 			}
 
@@ -1619,6 +1626,7 @@ export async function httpRequestWithAuthentication(
 			return await requestOAuth1.call(this, credentialsType, requestOptions, true);
 		}
 		if (parentTypes.includes('oAuth2Api')) {
+			console.log('REQUEST OPTOINS: ');
 			return await requestOAuth2.call(
 				this,
 				credentialsType,
@@ -3103,6 +3111,7 @@ const getRequestHelperFunctions = (
 			requestOptions,
 			additionalCredentialOptions,
 		): Promise<any> {
+			console.log('inside http request: ');
 			return await httpRequestWithAuthentication.call(
 				this,
 				credentialsType,
@@ -3150,6 +3159,7 @@ const getRequestHelperFunctions = (
 			requestOptions: IRequestOptions,
 			oAuth2Options?: IOAuth2Options,
 		): Promise<any> {
+			console.log('inside requsetOauth 2 in nodeExecute ');
 			return await requestOAuth2.call(
 				this,
 				credentialsType,

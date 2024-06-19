@@ -17,9 +17,7 @@ interface CsrfStateParam {
 	token: string;
 }
 
-
-
-const hardcodedID : string = '9f689268-747c-4a96-b660-43012db51f63';  
+const hardcodedID: string = 'ad505479-c57f-4d1e-8bfb-bd10e8739356';
 
 @RestController('/oauth2-credential')
 export class OAuth2CredentialController extends AbstractOAuthController {
@@ -27,10 +25,9 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 
 	/** Get Authorization url */
 	@Get('/auth')
-
 	async getAuthUri(req: OAuthRequest.OAuth2Credential.Auth): Promise<string> {
-		const credential = await this.getCredential(req, hardcodedID); 
-		const additionalData = await this.getAdditionalData(req.user, hardcodedID); 
+		const credential = await this.getCredential(req, hardcodedID);
+		const additionalData = await this.getAdditionalData(req.user, hardcodedID);
 		const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
 
 		// At some point in the past we saved hidden scopes to credentials (but shouldn't)
@@ -53,7 +50,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 
 		// Generate a CSRF prevention token and send it as an OAuth2 state string
 		const [csrfSecret, state] = this.createCsrfState(credential.id);
-		
+
 		const oAuthOptions = {
 			...this.convertCredentialToOptions(oauthCredentials),
 			state,
@@ -82,7 +79,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 		const returnUri = oAuthObj.code.getUri();
 
 		this.logger.verbose('OAuth2 authorization url created for credential', {
-			userId: hardcodedID,  
+			userId: hardcodedID,
 			credentialId: credential.id,
 		});
 		return returnUri.toString();
@@ -119,7 +116,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 				return this.renderCallbackError(res, errorMessage);
 			}
 
-			const additionalData = await this.getAdditionalData(req.user, hardcodedID);  
+			const additionalData = await this.getAdditionalData(req.user, hardcodedID);
 
 			const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
 			const oauthCredentials = this.applyDefaultsAndOverwrites<OAuth2CredentialData>(
@@ -181,7 +178,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 					credentialId: credential.id,
 				});
 				return this.renderCallbackError(res, errorMessage);
-			}    
+			}
 
 			if (decryptedDataOriginal.oauthTokenData) {
 				// Only overwrite supplied data as some providers do for example just return the
@@ -195,7 +192,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 			delete decryptedDataOriginal.csrfSecret;
 			await this.encryptAndSaveData(credential, decryptedDataOriginal);
 
-			// add logic for storing credential.id and credential.type in db 
+			// add logic for storing credential.id and credential.type in db (next step)
 			this.logger.verbose('OAuth2 callback successful for credential', {
 				userId: req.user?.id,
 				credentialId: credential.id,
