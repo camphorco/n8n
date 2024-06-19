@@ -313,7 +313,6 @@ export function getExecuteFunctions(
 				async httpRequest(
 					requestOptions: IHttpRequestOptions,
 				): Promise<IN8nHttpFullResponse | IN8nHttpResponse> {
-					console.log("http request: ", requestOptions);
 					return {
 						body: {
 							headers: {},
@@ -328,7 +327,6 @@ export function getExecuteFunctions(
 					requestOptions: IHttpRequestOptions,
 					additionalCredentialOptions?: IAdditionalCredentialOptions,
 				): Promise<any> {
-					console.log("request with auth: ");
 					return {
 						body: {
 							headers: {},
@@ -345,7 +343,6 @@ export function getExecuteFunctions(
 					requestOptions: IHttpRequestOptions,
 					additionalCredentialOptions?: IAdditionalCredentialOptions,
 				): Promise<any> {
-					console.log("http request with auth: ");
 					return {
 						body: {
 							headers: {},

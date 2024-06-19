@@ -3111,7 +3111,6 @@ const getRequestHelperFunctions = (
 			requestOptions,
 			additionalCredentialOptions,
 		): Promise<any> {
-			console.log('inside http request: ');
 			return await httpRequestWithAuthentication.call(
 				this,
 				credentialsType,

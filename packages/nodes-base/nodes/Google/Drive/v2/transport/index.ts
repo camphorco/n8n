@@ -37,7 +37,6 @@ export async function googleApiRequest(
 	};
 
 	options = Object.assign({}, options, option);
-	console.log('inside transport index.ts');
 	try {
 		if (Object.keys(body).length === 0) {
 			delete options.body;

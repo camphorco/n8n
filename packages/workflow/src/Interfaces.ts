@@ -521,7 +521,6 @@ export interface IHttpRequestOptions {
 		protocol?: string;
 	};
 	timeout?: number;
-	oAuth2?: boolean;
 	json?: boolean;
 }
 
@@ -553,7 +552,6 @@ export interface IRequestOptions {
 	json?: boolean;
 	useStream?: boolean;
 	encoding?: string | null;
-	oAuth2? : boolean;
 	timeout?: number;
 	rejectUnauthorized?: boolean;
 	proxy?: string | AxiosProxyConfig;
@@ -1287,7 +1285,6 @@ export interface INodeProperties {
 	placeholder?: string;
 	isNodeSetting?: boolean;
 	noDataExpression?: boolean;
-	OAuth2? : boolean;
 	required?: boolean;
 	routing?: INodePropertyRouting;
 	credentialTypes?: Array<
