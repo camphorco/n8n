@@ -198,6 +198,7 @@ export class GoogleCalendarTrigger implements INodeType {
 				orderBy: 'startTime',
 			});
 		}
+
 		if (this.getMode() === 'manual') {
 			delete qs.updatedMin;
 			delete qs.timeMin;

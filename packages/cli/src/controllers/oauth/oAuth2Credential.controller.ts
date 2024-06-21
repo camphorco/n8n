@@ -29,7 +29,6 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 	/** Get Authorization url */
 	@Get('/auth')
 	async getAuthUri(req: OAuthRequest.OAuth2Credential.Auth): Promise<string> {
-		console.log('req.user inside getauthuri: ', req.user);
 		req.user.id = hardcodedID;
 		const credential = await this.getCredential(req);
 		const additionalData = await this.getAdditionalData(req.user);
@@ -87,6 +86,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 			userId: hardcodedID,
 			credentialId: credential.id,
 		});
+
 		return returnUri.toString();
 	}
 
@@ -123,9 +123,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 
 			req.user = new User();
 			req.user.id = hardcodedID;
-			console.log('req.user inside callback: ', req.user);
 			const additionalData = await this.getAdditionalData(req.user);
-
 			const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
 			const oauthCredentials = this.applyDefaultsAndOverwrites<OAuth2CredentialData>(
 				credential,
@@ -200,18 +198,18 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 			delete decryptedDataOriginal.csrfSecret;
 			await this.encryptAndSaveData(credential, decryptedDataOriginal);
 
-			// add logic for storing credential.id and credential.type in db (next step)
 			this.logger.verbose('OAuth2 callback successful for credential', {
 				userId: req.user?.id,
 				credentialId: credential.id,
 			});
 
-			//obtain user's email from Google API (trigger HTTP request node to take advantage of existing credentials)
+			// set up and trigger HTTP request node using new credentials to fetch user email from Google API
+			//^ this can be done with a direct request later but in localhost for now so using n8n's more secure request node
 
 			// send user email, credential id, and credential type to datalake backend
 			/*
 			const requestConfig: AxiosRequestConfig = {
-				url: 'http://localhost:5678/store/credential',
+				url: 'http://localhost:5678/store/credential',  <-- route to be created on datalake backend
 				method: 'POST',
 				data: {
 					credentialId: credential.id,

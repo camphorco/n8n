@@ -60,7 +60,6 @@ export abstract class AbstractOAuthController {
 	}
 
 	protected async getAdditionalData(user: User) {
-		console.log('user inside get additional', user);
 		return await WorkflowExecuteAdditionalData.getBase(user.id);
 	}
 

@@ -46,7 +46,6 @@ export class AuthService {
 
 	async authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 		const token = req.cookies[AUTH_COOKIE_NAME];
-
 		if (token) {
 			try {
 				req.user = await this.resolveJwt(token, res);
