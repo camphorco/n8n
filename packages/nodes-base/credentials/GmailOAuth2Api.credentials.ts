@@ -10,7 +10,7 @@ const scopes = [
 ];
 
 export class GmailOAuth2Api implements ICredentialType {
-	name = 'gmailOAuth2Api';
+	name = 'gmailOAuth2';
 
 	extends = ['googleOAuth2Api'];
 

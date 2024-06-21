@@ -1298,6 +1298,7 @@ export async function requestOAuth2(
 	isN8nRequest = false,
 ) {
 	removeEmptyBody(requestOptions);
+
 	const credentials = (await this.getCredentials(
 		credentialsType,
 	)) as unknown as OAuth2CredentialData;
@@ -1360,10 +1361,8 @@ export async function requestOAuth2(
 
 	// Signs the request by adding authorization headers or query parameters depending
 	// on the token-type used.
-
 	const newRequestOptions = token.sign(requestOptions as ClientOAuth2RequestObject);
 	const newRequestHeaders = (newRequestOptions.headers = newRequestOptions.headers ?? {});
-
 	// If keep bearer is false remove the it from the authorization header
 	if (oAuth2Options?.keepBearer === false && typeof newRequestHeaders.Authorization === 'string') {
 		newRequestHeaders.Authorization = newRequestHeaders.Authorization.split(' ')[1];
@@ -1373,7 +1372,6 @@ export async function requestOAuth2(
 			[oAuth2Options.keyToIncludeInAccessTokenHeader]: token.accessToken,
 		});
 	}
-
 	if (isN8nRequest) {
 		return await this.helpers.httpRequest(newRequestOptions).catch(async (error: AxiosError) => {
 			if (error.response?.status === 401) {
@@ -1443,7 +1441,6 @@ export async function requestOAuth2(
 			: oAuth2Options?.tokenExpiredStatusCode;
 
 	return await this.helpers
-
 		.request(newRequestOptions as IRequestOptions)
 		.then((response) => {
 			const requestOptions = newRequestOptions as any;

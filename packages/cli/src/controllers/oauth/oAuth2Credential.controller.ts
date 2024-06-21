@@ -3,6 +3,8 @@ import { ClientOAuth2 } from '@n8n/client-oauth2';
 import Csrf from 'csrf';
 import { Response } from 'express';
 import pkceChallenge from 'pkce-challenge';
+import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import * as qs from 'querystring';
 import omit from 'lodash/omit';
 import set from 'lodash/set';
@@ -11,6 +13,7 @@ import { ApplicationError, jsonParse, jsonStringify } from 'n8n-workflow';
 import { Get, RestController } from '@/decorators';
 import { OAuthRequest } from '@/requests';
 import { AbstractOAuthController } from './abstractOAuth.controller';
+import { User } from '@/databases/entities/User';
 
 interface CsrfStateParam {
 	cid: string;
@@ -26,8 +29,10 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 	/** Get Authorization url */
 	@Get('/auth')
 	async getAuthUri(req: OAuthRequest.OAuth2Credential.Auth): Promise<string> {
-		const credential = await this.getCredential(req, hardcodedID);
-		const additionalData = await this.getAdditionalData(req.user, hardcodedID);
+		console.log('req.user inside getauthuri: ', req.user);
+		req.user.id = hardcodedID;
+		const credential = await this.getCredential(req);
+		const additionalData = await this.getAdditionalData(req.user);
 		const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
 
 		// At some point in the past we saved hidden scopes to credentials (but shouldn't)
@@ -116,7 +121,10 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 				return this.renderCallbackError(res, errorMessage);
 			}
 
-			const additionalData = await this.getAdditionalData(req.user, hardcodedID);
+			req.user = new User();
+			req.user.id = hardcodedID;
+			console.log('req.user inside callback: ', req.user);
+			const additionalData = await this.getAdditionalData(req.user);
 
 			const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
 			const oauthCredentials = this.applyDefaultsAndOverwrites<OAuth2CredentialData>(
@@ -197,6 +205,24 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 				userId: req.user?.id,
 				credentialId: credential.id,
 			});
+
+			//obtain user's email from Google API (trigger HTTP request node to take advantage of existing credentials)
+
+			// send user email, credential id, and credential type to datalake backend
+			/*
+			const requestConfig: AxiosRequestConfig = {
+				url: 'http://localhost:5678/store/credential',
+				method: 'POST',
+				data: {
+					credentialId: credential.id,
+					type: credential.type,
+				},
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			};
+
+			const response = await axios.request(requestConfig);*/
 
 			return res.render('oauth-callback');
 		} catch (error) {

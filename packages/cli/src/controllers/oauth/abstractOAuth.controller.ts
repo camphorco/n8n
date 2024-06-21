@@ -37,18 +37,15 @@ export abstract class AbstractOAuthController {
 
 	protected async getCredential(
 		req: OAuthRequest.OAuth2Credential.Auth,
-		id? : string 
 	): Promise<CredentialsEntity> {
 		const { id: credentialId } = req.query;
-
 		if (!credentialId) {
 			throw new BadRequestError('Required credential ID is missing');
 		}
 
-		const credential = await this.sharedCredentialsRepository.findCredentialForUser( 
+		const credential = await this.sharedCredentialsRepository.findCredentialForUser(
 			credentialId,
 			req.user,
-			id 
 		);
 
 		if (!credential) {
@@ -62,10 +59,8 @@ export abstract class AbstractOAuthController {
 		return credential;
 	}
 
-	protected async getAdditionalData(user : User, userId? : string) {  
-		if (userId !== undefined) {
-			return await WorkflowExecuteAdditionalData.getBase(userId);
-		}
+	protected async getAdditionalData(user: User) {
+		console.log('user inside get additional', user);
 		return await WorkflowExecuteAdditionalData.getBase(user.id);
 	}
 

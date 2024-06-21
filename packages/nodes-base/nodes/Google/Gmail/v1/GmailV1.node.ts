@@ -47,6 +47,15 @@ const versionDescription: INodeTypeDescription = {
 	outputs: ['main'],
 	credentials: [
 		{
+			name: 'googleApi',
+			required: true,
+			displayOptions: {
+				show: {
+					authentication: ['serviceAccount'],
+				},
+			},
+		},
+		{
 			name: 'googleOAuth2Api',
 			required: true,
 			displayOptions: {
@@ -67,6 +76,10 @@ const versionDescription: INodeTypeDescription = {
 					// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 					name: 'OAuth2 (recommended)',
 					value: 'oAuth2',
+				},
+				{
+					name: 'Service Account',
+					value: 'serviceAccount',
 				},
 			],
 			default: 'oAuth2',
