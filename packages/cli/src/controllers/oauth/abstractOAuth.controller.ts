@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Service } from 'typedi';
 import { Credentials } from 'n8n-core';
 import type { ICredentialDataDecryptedObject, IWorkflowExecuteAdditionalData } from 'n8n-workflow';
