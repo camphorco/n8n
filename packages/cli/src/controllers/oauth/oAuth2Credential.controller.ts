@@ -20,7 +20,8 @@ interface CsrfStateParam {
 	token: string;
 }
 
-const hardcodedID: string = '9f689268-747c-4a96-b660-43012db51f63';
+const hardcodedID: string = 'ad505479-c57f-4d1e-8bfb-bd10e8739356';
+//const hardcodedID: string = '9f689268-747c-4a96-b660-43012db51f63'; (shawn's for when you make a PR)
 
 @RestController('/oauth2-credential')
 export class OAuth2CredentialController extends AbstractOAuthController {
@@ -209,7 +210,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 			// send user email, credential id, and credential type to datalake backend
 			/*
 			const requestConfig: AxiosRequestConfig = {
-				url: 'http://localhost:5678/store/credential',  <-- route to be created on datalake backend
+				url: 'http://localhost:8000/store/credential',  <-- route to be created on datalake backend
 				method: 'POST',
 				data: {
 					credentialId: credential.id,

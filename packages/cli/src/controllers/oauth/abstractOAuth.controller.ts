@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Service } from 'typedi';
 import { Credentials } from 'n8n-core';
 import type { ICredentialDataDecryptedObject, IWorkflowExecuteAdditionalData } from 'n8n-workflow';
@@ -39,6 +40,7 @@ export abstract class AbstractOAuthController {
 		req: OAuthRequest.OAuth2Credential.Auth,
 	): Promise<CredentialsEntity> {
 		const { id: credentialId } = req.query;
+
 		if (!credentialId) {
 			throw new BadRequestError('Required credential ID is missing');
 		}
