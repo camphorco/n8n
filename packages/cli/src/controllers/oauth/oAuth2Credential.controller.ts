@@ -3,8 +3,6 @@ import { ClientOAuth2 } from '@n8n/client-oauth2';
 import Csrf from 'csrf';
 import { Response } from 'express';
 import pkceChallenge from 'pkce-challenge';
-import axios from 'axios';
-import type { AxiosRequestConfig } from 'axios';
 import * as qs from 'querystring';
 import omit from 'lodash/omit';
 import set from 'lodash/set';
