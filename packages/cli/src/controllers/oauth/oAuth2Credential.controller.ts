@@ -11,11 +11,14 @@ import { ApplicationError, jsonParse, jsonStringify } from 'n8n-workflow';
 import { Get, RestController } from '@/decorators';
 import { OAuthRequest } from '@/requests';
 import { AbstractOAuthController } from './abstractOAuth.controller';
+import { User } from '@/databases/entities/User';
 
 interface CsrfStateParam {
 	cid: string;
 	token: string;
 }
+
+const hardcodedID: string = '9f689268-747c-4a96-b660-43012db51f63';
 
 @RestController('/oauth2-credential')
 export class OAuth2CredentialController extends AbstractOAuthController {
@@ -24,6 +27,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 	/** Get Authorization url */
 	@Get('/auth')
 	async getAuthUri(req: OAuthRequest.OAuth2Credential.Auth): Promise<string> {
+		req.user.id = hardcodedID;
 		const credential = await this.getCredential(req);
 		const additionalData = await this.getAdditionalData(req.user);
 		const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
@@ -77,7 +81,7 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 		const returnUri = oAuthObj.code.getUri();
 
 		this.logger.verbose('OAuth2 authorization url created for credential', {
-			userId: req.user.id,
+			userId: hardcodedID,
 			credentialId: credential.id,
 		});
 
@@ -115,6 +119,8 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 				return this.renderCallbackError(res, errorMessage);
 			}
 
+			req.user = new User();
+			req.user.id = hardcodedID;
 			const additionalData = await this.getAdditionalData(req.user);
 			const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
 			const oauthCredentials = this.applyDefaultsAndOverwrites<OAuth2CredentialData>(

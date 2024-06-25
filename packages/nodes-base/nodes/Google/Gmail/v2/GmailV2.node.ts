@@ -58,7 +58,7 @@ const versionDescription: INodeTypeDescription = {
 			},
 		},
 		{
-			name: 'gmailOAuth2',
+			name: 'googleOAuth2Api',
 			required: true,
 			displayOptions: {
 				show: {

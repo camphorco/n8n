@@ -41,7 +41,7 @@ export class GmailTrigger implements INodeType {
 				},
 			},
 			{
-				name: 'gmailOAuth2',
+				name: 'googleOAuth2Api',
 				required: true,
 				displayOptions: {
 					show: {

@@ -32,6 +32,15 @@ export class GoogleCalendarTrigger implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
+				name: 'googleOAuth2Api',
+				required: true,
+				displayOptions: {
+					show: {
+						authentication: ['oAuth2'],
+					},
+				},
+			},
+			{
 				name: 'googleCalendarOAuth2Api',
 				required: true,
 			},
