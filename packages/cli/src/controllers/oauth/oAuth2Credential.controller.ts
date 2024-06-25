@@ -203,25 +203,6 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 				credentialId: credential.id,
 			});
 
-			// set up and trigger HTTP request node using new credentials to fetch user email from Google API
-			//^ this can be done with a direct request later but in localhost for now so using n8n's more secure request node
-
-			// send user email, credential id, and credential type to datalake backend
-			/*
-			const requestConfig: AxiosRequestConfig = {
-				url: 'http://localhost:8000/store/credential',  <-- route to be created on datalake backend
-				method: 'POST',
-				data: {
-					credentialId: credential.id,
-					type: credential.type,
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			const response = await axios.request(requestConfig);*/
-
 			return res.render('oauth-callback');
 		} catch (error) {
 			return this.renderCallbackError(
