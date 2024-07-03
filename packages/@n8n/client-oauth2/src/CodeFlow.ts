@@ -23,14 +23,12 @@ export class CodeFlow {
 	 * Generate the uri for doing the first redirect.
 	 */
 	getUri(opts?: Partial<ClientOAuth2Options>): string {
-		console.log('topps: ', opts);
 		const options: ClientOAuth2Options = { ...this.client.options, ...opts };
 
 		// Check the required parameters are set.
 		expects(options, 'clientId', 'authorizationUri');
 
 		const url = new URL(options.authorizationUri);
-		console.log('url: ', url);
 
 		const queryParams = {
 			...options.query,
@@ -40,13 +38,11 @@ export class CodeFlow {
 			state: options.state,
 			...(options.scopes ? { scope: options.scopes.join(options.scopesSeparator ?? ' ') } : {}),
 		};
-		console.log('queryParams: ', queryParams);
 		for (const [key, value] of Object.entries(queryParams)) {
 			if (value !== null && value !== undefined) {
 				url.searchParams.append(key, value);
 			}
 		}
-		console.log('final url: ', url);
 		return url.toString();
 	}
 

@@ -30,7 +30,6 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 	/** Get Authorization url */
 	@Get('/auth')
 	async getAuthUri(req: OAuthRequest.OAuth2Credential.Auth): Promise<string> {
-		console.log('request that makes it to getAuthUrI: ', req.user, req.query);
 		function checkScope(scope: Scope | Scope[], scopeOptions?: ScopeOptions): boolean {
 			return true;
 		}
