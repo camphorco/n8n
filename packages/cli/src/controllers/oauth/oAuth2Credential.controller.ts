@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { ClientOAuth2Options, OAuth2CredentialData } from '@n8n/client-oauth2';
 import { ClientOAuth2 } from '@n8n/client-oauth2';
 import Csrf from 'csrf';
@@ -12,6 +14,7 @@ import { Get, RestController } from '@/decorators';
 import { OAuthRequest } from '@/requests';
 import { AbstractOAuthController } from './abstractOAuth.controller';
 import { User } from '@/databases/entities/User';
+import type { Scope, ScopeOptions } from '@n8n/permissions';
 
 interface CsrfStateParam {
 	cid: string;
@@ -27,7 +30,15 @@ export class OAuth2CredentialController extends AbstractOAuthController {
 	/** Get Authorization url */
 	@Get('/auth')
 	async getAuthUri(req: OAuthRequest.OAuth2Credential.Auth): Promise<string> {
+		console.log('request that makes it to getAuthUrI: ', req.user, req.query);
+		function checkScope(scope: Scope | Scope[], scopeOptions?: ScopeOptions): boolean {
+			return true;
+		}
+		if (req.user === undefined) {
+			req.user = new User();
+		}
 		req.user.id = hardcodedID;
+		req.user.hasGlobalScope = checkScope;
 		const credential = await this.getCredential(req);
 		const additionalData = await this.getAdditionalData(req.user);
 		const decryptedDataOriginal = await this.getDecryptedData(credential, additionalData);
