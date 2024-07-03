@@ -38,11 +38,13 @@ export class CodeFlow {
 			state: options.state,
 			...(options.scopes ? { scope: options.scopes.join(options.scopesSeparator ?? ' ') } : {}),
 		};
+
 		for (const [key, value] of Object.entries(queryParams)) {
 			if (value !== null && value !== undefined) {
 				url.searchParams.append(key, value);
 			}
 		}
+
 		return url.toString();
 	}
 

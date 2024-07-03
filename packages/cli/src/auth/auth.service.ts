@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { Service } from 'typedi';
 import type { NextFunction, Response } from 'express';
 import { createHash } from 'crypto';
@@ -10,7 +9,6 @@ import type { User } from '@db/entities/User';
 import { UserRepository } from '@db/repositories/user.repository';
 import { AuthError } from '@/errors/response-errors/auth.error';
 import { UnauthorizedError } from '@/errors/response-errors/unauthorized.error';
-
 import { License } from '@/License';
 import { Logger } from '@/Logger';
 import type { AuthenticatedRequest } from '@/requests';

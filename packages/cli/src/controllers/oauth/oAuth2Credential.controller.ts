@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { ClientOAuth2Options, OAuth2CredentialData } from '@n8n/client-oauth2';
 import { ClientOAuth2 } from '@n8n/client-oauth2';
 import Csrf from 'csrf';
@@ -21,6 +19,7 @@ interface CsrfStateParam {
 	token: string;
 }
 
+// change before moving to production
 const hardcodedID: string = '9f689268-747c-4a96-b660-43012db51f63';
 
 @RestController('/oauth2-credential')
